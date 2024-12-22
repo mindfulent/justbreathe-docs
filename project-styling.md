@@ -143,7 +143,7 @@ This approach provides:
 6. [DONE] IntakeForm.vue
 7. [DONE] ServiceTemplateCard.vue
 8. [DONE] ServiceTemplatesGrid.vue
-9. [TODO] SelectADate.vue
+9. [DONE] SelectADate.vue
 10. [TODO] SelectATimezone.vue
 11. [TODO] AvailableTimeSlots.vue
 
