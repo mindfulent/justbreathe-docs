@@ -144,7 +144,7 @@ This approach provides:
 7. [DONE] ServiceTemplateCard.vue
 8. [DONE] ServiceTemplatesGrid.vue
 9. [DONE] SelectADate.vue
-10. [TODO] SelectATimezone.vue
+10. [DONE] SelectATimezone.vue
 11. [TODO] AvailableTimeSlots.vue
 
 ##### Notification Components
