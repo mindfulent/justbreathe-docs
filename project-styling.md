@@ -148,8 +148,8 @@ This approach provides:
 11. [TODO] AvailableTimeSlots.vue
 
 ##### Notification Components
-12. [TODO] NotificationList.vue
-13. [TODO] NotificationItem.vue
+12. [DONE] NotificationList.vue
+13. [DONE] NotificationItem.vue
 
 ##### Effect Components
 14. [TODO] SnowEffect.vue
