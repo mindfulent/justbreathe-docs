@@ -133,10 +133,10 @@ This approach provides:
 #### 6. [TODO] Frontend Components and Pages that need to be styled
 
 ##### Core Components
-1. [TODO] NavigationBar.vue
-2. [TODO] FooterBar.vue
-3. [TODO] TabComponent.vue
-4. [TODO] ToastContent.vue
+1. [DONE] NavigationBar.vue
+2. [DONE] FooterBar.vue
+3. [DONE] TabComponent.vue
+4. [DONE] ToastContent.vue
 
 ##### Interactive Components
 5. [TODO] GoogleAuthButton.vue
