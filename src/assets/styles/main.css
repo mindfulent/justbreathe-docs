@@ -1,8 +1,0 @@
-/* Import CSS Variables */
-@import './variables.css';
-
-/* Global styles */
-body {
-  color: var(--breathe-dark-primary);
-  background-color: white;
-}
