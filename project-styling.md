@@ -142,7 +142,7 @@ This approach provides:
 5. [DONE] GoogleAuthButton.vue
 6. [DONE] IntakeForm.vue
 7. [DONE] ServiceTemplateCard.vue
-8. [TODO] ServiceTemplatesGrid.vue
+8. [DONE] ServiceTemplatesGrid.vue
 9. [TODO] SelectADate.vue
 10. [TODO] SelectATimezone.vue
 11. [TODO] AvailableTimeSlots.vue
