@@ -1,5 +1,9 @@
 # Just Breathe - Project Styling Guide
 
+## Project Overview and Instructions
+
+This styling implementation project aims to standardize the visual design across all 51 components and pages while preserving existing functionality. For each file, implement the defined color palette using Tailwind classes and CSS variables, maintain WCAG 2.1 accessibility compliance, and ensure all interactive elements retain their current behavior. Test each styled component in isolation and in context to verify both visual consistency and functional integrity. Update the checklist status from [TODO] to [DONE] only after thorough testing confirms no regression in component functionality.
+
 ## Color Palette
 
 Our color palette is designed to create a calming, professional experience that aligns with our brand values of simplicity and effortless growth.
@@ -125,3 +129,90 @@ This approach provides:
 - Easy global color updates
 - Flexibility between utility classes and CSS variables
 - TypeScript support through Tailwind's type system
+
+#### 6. [TODO] Frontend Components and Pages that need to be styled
+
+##### Core Components
+1. [TODO] NavigationBar.vue
+2. [TODO] FooterBar.vue
+3. [TODO] TabComponent.vue
+4. [TODO] ToastContent.vue
+
+##### Interactive Components
+5. [TODO] GoogleAuthButton.vue
+6. [TODO] IntakeForm.vue
+7. [TODO] ServiceTemplateCard.vue
+8. [TODO] ServiceTemplatesGrid.vue
+9. [TODO] SelectADate.vue
+10. [TODO] SelectATimezone.vue
+11. [TODO] AvailableTimeSlots.vue
+
+##### Notification Components
+12. [TODO] NotificationList.vue
+13. [TODO] NotificationItem.vue
+
+##### Effect Components
+14. [TODO] SnowEffect.vue
+15. [TODO] ConfettiEffect.vue
+16. [TODO] BackgroundVideo.vue
+17. [TODO] BadgeAwardModal.vue
+
+##### Pages - Authentication & User Management
+18. [TODO] LoginPage.vue
+19. [TODO] SignupPage.vue
+20. [TODO] ForgotPasswordPage.vue
+21. [TODO] ResetPasswordPage.vue
+22. [TODO] VerifyEmailPage.vue
+23. [TODO] CheckYourEmailPage.vue
+24. [TODO] GoogleAuthCallback.vue
+25. [TODO] GoogleCalendarCallback.vue
+26. [TODO] SettingsPage.vue
+
+##### Pages - Core Features
+27. [TODO] HomePage.vue
+28. [TODO] AboutPage.vue
+29. [TODO] PrivacyPolicyPage.vue
+30. [TODO] TermsPage.vue
+31. [TODO] FeedbackPage.vue
+
+##### Pages - Service Management
+32. [TODO] ServicesPage.vue
+33. [TODO] ServiceDetailsPage.vue
+34. [TODO] NewServicePage.vue
+35. [TODO] BookServicePage.vue
+36. [TODO] BookingConfirmationPage.vue
+37. [TODO] BookingDetailsPage.vue
+38. [TODO] CreateBookingPage.vue
+
+##### Pages - Client Management
+39. [TODO] ClientsPage.vue
+40. [TODO] ClientDetailsPage.vue
+41. [TODO] FormsPage.vue
+42. [TODO] EmailTemplatesPage.vue
+
+##### Pages - Notifications & Updates
+43. [TODO] NotificationsPage.vue
+44. [TODO] NotificationSettingsPage.vue
+45. [TODO] NotificationTestPage.vue
+46. [TODO] ReleasesPage.vue
+
+##### Pages - Other
+47. [TODO] BrowsePage.vue
+48. [TODO] PublicProfilePage.vue
+49. [TODO] NotFoundPage.vue
+50. [TODO] DevAuthPage.vue (if needed for production)
+51. [TODO] SnowTest.vue (if needed for production)
+
+Total Files to Update: 51 files
+Total Files Completed: 0 files
+Last Updated: 2024-12-22 7:56 AM
+
+#### Implementation Priority:
+1. Core Components (#1-4)
+2. Authentication Pages (#18-26)
+3. Core Feature Pages (#27-31)
+4. Service Management Components and Pages (#7-8, #32-38)
+5. Client Management Components and Pages (#39-42)
+6. Notification Components and Pages (#12-13, #43-46)
+7. Effect Components (#14-17)
+8. Remaining Pages and Components
