@@ -152,10 +152,10 @@ This approach provides:
 13. [DONE] NotificationItem.vue
 
 ##### Effect Components
-14. [TODO] SnowEffect.vue
-15. [TODO] ConfettiEffect.vue
-16. [TODO] BackgroundVideo.vue
-17. [TODO] BadgeAwardModal.vue
+14. [DONE] SnowEffect.vue
+15. [DONE] ConfettiEffect.vue
+16. [DONE] BackgroundVideo.vue
+17. [DONE] BadgeAwardModal.vue
 
 ##### Pages - Authentication & User Management
 18. [TODO] LoginPage.vue
