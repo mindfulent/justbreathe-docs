@@ -139,8 +139,8 @@ This approach provides:
 4. [DONE] ToastContent.vue
 
 ##### Interactive Components
-5. [TODO] GoogleAuthButton.vue
-6. [TODO] IntakeForm.vue
+5. [DONE] GoogleAuthButton.vue
+6. [DONE] IntakeForm.vue
 7. [TODO] ServiceTemplateCard.vue
 8. [TODO] ServiceTemplatesGrid.vue
 9. [TODO] SelectADate.vue
