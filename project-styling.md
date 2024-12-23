@@ -340,7 +340,7 @@ This approach provides:
 39. [ ] BookingConfirmationPage.vue
 40. [ ] BookingDetailsPage.vue
 41. [ ] CreateBookingPage.vue
-42. [ ] ClientsPage.vue
+42. [x] ClientsPage.vue
 43. [ ] ClientDetailsPage.vue
 44. [ ] FormsPage.vue
 45. [ ] EmailTemplatesPage.vue
