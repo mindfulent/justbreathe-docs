@@ -1,136 +1,163 @@
-# AddNewServiceCard Component Documentation
+# AddNewServiceCard Component Tests
 
 ## Overview
-The AddNewServiceCard component is a reusable card component that provides an interface for adding new services. It maintains consistent styling with the project's design system and implements full accessibility support.
+The `AddNewServiceCard` component tests cover form functionality, accessibility features, API integration, and user interactions for both add and edit modes.
 
-## Component Features
-- Responsive design adapting to mobile and desktop views
-- Accessible form inputs with proper labeling
-- Interactive hover and focus states
-- Toast notifications for success/error feedback
-- Keyboard navigation support
+## Test Structure
 
-## Styling Implementation
-- Uses Tailwind classes for consistent theming
-- Implements project color palette:
-  - Background: breathe-light-primary
-  - Text: breathe-dark-primary
-  - Interactive elements: breathe-dark-tertiary
-- Maintains WCAG 2.1 Level AA compliance
+### Component Rendering
+- Verifies correct rendering in add mode with all required fields
+- Validates edit mode rendering with pre-populated service data
+- Ensures proper display of form fields, options, and buttons
 
-## Accessibility Features
-- Semantic HTML structure
-- ARIA labels and roles
-- Focus management
-- Screen reader support
-- Keyboard navigation
-- High contrast text
+### Accessibility Tests
+- Validates ARIA labels and roles for form elements
+- Tests keyboard navigation and focus management
+- Verifies required field attributes
+- Ensures proper button accessibility
 
-## Test Coverage
+### Form Validation
+- Tests required fields (name, description, category)
+- Validates service options (duration and fee)
+- Checks form submission with invalid data
+- Verifies validation state indicators
 
-### Unit Tests
+### Service Options Management
+- Tests adding multiple service options
+- Validates removing service options
+- Verifies fee input formatting
+- Tests duration and fee validation
+
+### Form Submission
+- Tests successful form submission in add mode
+- Validates emitted events with correct data structure
+- Verifies cancel functionality
+- Tests form submission in edit mode
+
+### API Integration
+- Tests email template fetching
+- Tests intake form fetching
+- Validates error handling for API calls
+- Tests loading states
+
+## Test Cases
+
 ```typescript
-import { describe, it, expect } from 'vitest'
-import { render, fireEvent, screen } from '@testing-library/vue'
-import AddNewServiceCard from '@/components/AddNewServiceCard.vue'
-
 describe('AddNewServiceCard', () => {
   describe('Component Rendering', () => {
-    it('renders with proper styling classes', () => {
-      const { container } = render(AddNewServiceCard)
-      expect(container.firstChild).toHaveClass('bg-breathe-light-primary')
-      expect(container.firstChild).toHaveClass('rounded-lg')
-    })
+    // Tests basic rendering in add mode
+    // Tests edit mode with populated data
   })
 
   describe('Accessibility', () => {
-    it('has proper ARIA attributes', () => {
-      render(AddNewServiceCard)
-      const addButton = screen.getByRole('button', { name: /add new service/i })
-      expect(addButton).toHaveAttribute('aria-label')
-    })
-
-    it('maintains focus management', async () => {
-      render(AddNewServiceCard)
-      const addButton = screen.getByRole('button', { name: /add new service/i })
-      await fireEvent.click(addButton)
-      const form = screen.getByRole('form')
-      expect(form).toHaveFocus()
-    })
-
-    it('supports keyboard navigation', async () => {
-      render(AddNewServiceCard)
-      const addButton = screen.getByRole('button', { name: /add new service/i })
-      await fireEvent.keyDown(addButton, { key: 'Enter' })
-      expect(screen.getByRole('form')).toBeVisible()
-    })
+    // Tests ARIA attributes
+    // Tests keyboard navigation
+    // Tests focus management
   })
 
-  describe('Interactivity', () => {
-    it('shows hover state on interactive elements', async () => {
-      render(AddNewServiceCard)
-      const addButton = screen.getByRole('button', { name: /add new service/i })
-      await fireEvent.mouseOver(addButton)
-      expect(addButton).toHaveClass('hover:bg-breathe-dark-tertiary')
-    })
-
-    it('displays success toast on successful service addition', async () => {
-      const { getByRole, emitted } = render(AddNewServiceCard)
-      const addButton = getByRole('button', { name: /add new service/i })
-      await fireEvent.click(addButton)
-      // Fill form and submit
-      await fireEvent.submit(getByRole('form'))
-      expect(emitted()).toHaveProperty('service-added')
-    })
+  describe('Form Validation', () => {
+    // Tests required fields
+    // Tests service options validation
   })
 
-  describe('Responsive Behavior', () => {
-    it('adapts to mobile view', () => {
-      const { container } = render(AddNewServiceCard)
-      // Test mobile-specific classes
-      expect(container.firstChild).toHaveClass('md:w-full')
-    })
+  describe('Service Options Management', () => {
+    // Tests adding/removing options
+    // Tests fee formatting
+  })
 
-    it('adapts to desktop view', () => {
-      const { container } = render(AddNewServiceCard)
-      // Test desktop-specific classes
-      expect(container.firstChild).toHaveClass('lg:w-1/3')
-    })
+  describe('Form Submission', () => {
+    // Tests form submission events
+    // Tests cancel functionality
+  })
+
+  describe('API Integration', () => {
+    // Tests API calls
+    // Tests error handling
   })
 })
 ```
 
-### Test Cases Overview
-1. **Component Rendering**
-   - Proper styling classes application
-   - Responsive layout classes
-   - Dynamic class updates
+## Key Features Tested
 
-2. **Accessibility Testing**
-   - ARIA attributes presence
-   - Keyboard navigation
+1. **Form Fields**
+   - Name input (required)
+   - Description input (required)
+   - Category input (required)
+   - Email template selection
+   - Intake form selection
+   - Service requirements checkboxes
+
+2. **Service Options**
+   - Duration input
+   - Fee input
+   - Multiple options management
+   - Fee formatting
+
+3. **Validation**
+   - Required field validation
+   - Service options validation
+   - Form submission validation
+
+4. **Accessibility**
+   - ARIA labels
+   - Required field indicators
    - Focus management
-   - Screen reader compatibility
+   - Keyboard navigation
 
-3. **Interactive Behavior**
-   - Hover states
-   - Click events
-   - Form submission
-   - Toast notifications
+5. **Events**
+   - submit-service event
+   - cancel-add-service event
 
-4. **Responsive Design**
-   - Mobile view adaptation
-   - Desktop view adaptation
-   - Layout transitions
+6. **API Integration**
+   - Email templates fetching
+   - Intake forms fetching
+   - Error handling
 
-## Running Tests
+## Test Coverage
+
+The tests provide comprehensive coverage of:
+- Component rendering
+- Form validation
+- Service options management
+- Accessibility features
+- User interactions
+- Event handling
+- API integration
+- Error handling
+
+## Running the Tests
+
 ```bash
-# Run component tests
+# Run all component tests
+npm run test
+
+# Run specific test file
 npm run test AddNewServiceCard.spec.ts
 
 # Run with coverage
-npm run test:coverage AddNewServiceCard.spec.ts
+npm run test:coverage
+```
 
-# Run in watch mode
-npm run test:watch AddNewServiceCard.spec.ts
+## Mock Setup
+
+The tests use mocked API responses for email templates and intake forms:
+
+```typescript
+vi.mock('@/utils/api', () => ({
+  default: {
+    get: vi.fn()
+  }
+}))
+
+beforeEach(() => {
+  vi.mocked(api.get).mockImplementation((url) => {
+    if (url === '/email-templates/') {
+      return Promise.resolve({ data: [] })
+    }
+    if (url === '/intake-forms/') {
+      return Promise.resolve({ data: [] })
+    }
+    return Promise.reject(new Error('Not found'))
+  })
+})
 ``` 
