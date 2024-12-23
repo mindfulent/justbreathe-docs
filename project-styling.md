@@ -311,7 +311,7 @@ This approach provides:
 14. [TODO] SnowEffect.vue
 15. [TODO] ConfettiEffect.vue
 16. [TODO] BackgroundVideo.vue
-17. [TODO] BadgeAwardModal.vue
+17. [DONE] BadgeAwardModal.vue
 
 ##### Pages 
 18. [DONE] LoginPage.vue
