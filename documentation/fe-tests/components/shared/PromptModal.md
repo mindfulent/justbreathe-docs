@@ -3,6 +3,90 @@
 ## Overview
 The PromptModal is a reusable modal dialog component that follows accessibility best practices and implements the project's styling guidelines. It provides a consistent way to present prompts, confirmations, and alerts to users.
 
+## Common Usage Patterns
+
+### Deletion Confirmation Pattern
+The PromptModal is commonly used for deletion confirmations throughout the application. This pattern has been standardized across various components including:
+- Account deletion
+- Email template deletion
+- Form deletion
+- Client deletion
+- Service deletion
+
+#### Implementation Pattern
+```vue
+<!-- Parent Component Template -->
+<CardComponent>
+  <button @click="showModal = true">Delete Item</button>
+  <PromptModal
+    v-model="showModal"
+    title="Delete Item"
+    message="Are you sure you want to delete this item? This action cannot be undone."
+    confirm-text="Yes, Delete"
+    cancel-text="Cancel"
+    confirm-label="Confirm deletion"
+    cancel-label="Cancel deletion"
+    :show-cancel="true"
+    @confirm="handleDelete"
+    @cancel="cancelDelete"
+  />
+</CardComponent>
+
+<!-- Parent Component Script -->
+<script setup lang="ts">
+const showModal = ref(false);
+const isDeleting = ref(false);
+
+const handleDelete = async () => {
+  try {
+    // Set deleting state to prevent further API calls
+    isDeleting.value = true;
+    
+    // Small delay to ensure components unmount
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Perform deletion
+    await deleteItem();
+    
+    // Show success message
+    showToast('Item deleted successfully', 'success');
+    
+    // Clean up state if necessary
+    // Redirect or update UI
+  } catch (err) {
+    isDeleting.value = false;
+    showToast('Failed to delete item', 'error');
+  }
+};
+
+const cancelDelete = () => {
+  showModal.value = false;
+};
+</script>
+```
+
+#### Best Practices
+1. **State Management**
+   - Use `isDeleting` flag to prevent component API calls during deletion
+   - Unmount components before starting deletion process
+   - Clean up state after successful deletion
+
+2. **Error Handling**
+   - Reset deletion state on error
+   - Show appropriate error messages
+   - Maintain component state on failure
+
+3. **User Experience**
+   - Clear confirmation messages
+   - Consistent button labeling
+   - Immediate feedback via toast messages
+   - Proper focus management
+
+4. **API Call Prevention**
+   - Unmount components before deletion to prevent unnecessary API calls
+   - Add small delay to ensure unmounting completes
+   - Clean up auth/user state in correct order
+
 ## Styling Implementation
 
 ### Color Scheme
