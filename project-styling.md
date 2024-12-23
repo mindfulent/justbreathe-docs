@@ -1,8 +1,75 @@
-# Just Breathe - Project Styling Guide
+# Just Breathe - Project Styling and Accessibility Guide
 
 ## Project Overview and Instructions
 
-This styling implementation project aims to standardize the visual design across all 51 components and pages while preserving existing functionality. For each file, implement the defined color palette using Tailwind classes and CSS variables, maintain WCAG 2.1 accessibility compliance, and ensure all interactive elements retain their current behavior. Test each styled component in isolation and in context to verify both visual consistency and functional integrity. Update the checklist status from [TODO] to [DONE] only after thorough testing confirms no regression in component functionality.
+This implementation project has two main objectives:
+1. Standardize the visual design across all 51 components and pages while preserving existing functionality
+2. Ensure comprehensive accessibility compliance and testing for all components
+
+For each file:
+- Implement the defined color palette using Tailwind classes and CSS variables
+- Apply accessibility standards and ARIA attributes as defined in the Accessibility Standards section
+- Maintain WCAG 2.1 Level AA compliance
+- Ensure all interactive elements retain their current behavior
+- Test each component for both visual consistency and accessibility compliance
+- Document accessibility features in component comments
+
+Update the checklist status from [TODO] to [DONE] only after thorough testing confirms:
+- No regression in component functionality
+- Passing accessibility audit (see Testing Checklist)
+- Screen reader compatibility verified
+- Keyboard navigation tested
+
+## Accessibility Standards
+
+### 1. Semantic HTML and ARIA
+- Use semantic HTML elements whenever possible (nav, main, article, section, etc.)
+- Add appropriate ARIA labels and roles where semantic HTML is insufficient
+- Implement proper heading hierarchy (h1 -> h6)
+- Ensure form fields have associated labels
+- Add aria-live regions for dynamic content
+
+### 2. Keyboard Navigation
+- Ensure all interactive elements are focusable
+- Implement logical tab order
+- Add visible focus indicators
+- Provide keyboard shortcuts for common actions
+- Ensure no keyboard traps
+
+### 3. Screen Reader Compatibility
+- Add descriptive alt text for images
+- Implement aria-label for icons and decorative elements
+- Provide context for screen readers through aria-describedby where needed
+- Announce dynamic content changes
+- Include skip links for main content
+
+### 4. Interactive Elements
+- Ensure sufficient touch targets (minimum 44x44px)
+- Add hover and focus states
+- Provide feedback for user actions
+- Implement error handling with clear feedback
+- Support both mouse and touch interactions
+
+### Testing Checklist
+For each component, verify:
+
+#### Automated Testing
+- Run aXe or similar accessibility testing tool
+- Verify color contrast compliance
+- Check HTML validity
+- Test with ESLint a11y plugin
+
+#### Manual Testing
+- Test with VoiceOver/NVDA screen readers
+- Verify keyboard navigation
+- Check touch target sizes
+- Test at 200% zoom
+- Verify responsive behavior
+
+#### Documentation
+- Add accessibility features to component documentation
+- Document any known limitations
+- Include screen reader instructions if needed
 
 ## Color Palette and Text Contrast Guidelines
 
@@ -144,8 +211,8 @@ This approach provides:
 #### 6. Frontend Components and Pages that need to be styled
 
 ##### Core Components
-1. [DONE] NavigationBar.vue
-2. [DONE] FooterBar.vue
+1. [NEEDS UPDATED] NavigationBar.vue
+2. [NEEDS UPDATED] FooterBar.vue
 3. [TODO] TabComponent.vue
 4. [TODO] ToastContent.vue
 
