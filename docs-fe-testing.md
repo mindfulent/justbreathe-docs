@@ -704,6 +704,245 @@ describe('Error Handling', () => {
 })
 ```
 
+### SignupPage.vue [DONE]
+
+The SignupPage component demonstrates testing of form validation, user registration flows, Google authentication integration, and accessibility features for the signup interface.
+
+#### Test Setup
+
+```typescript
+const mountComponent = () => {
+  // Create a test pinia instance
+  const pinia = createTestingPinia({
+    createSpy: vi.fn
+  })
+
+  // Mount with dependencies
+  return mount(SignupPage, {
+    global: {
+      plugins: [pinia],
+      components: {
+        'CardComponent': mockCardComponent,
+        'GoogleAuthButton': mockGoogleAuthButton
+      },
+      stubs: {
+        'router-link': {
+          template: '<a><slot></slot></a>',
+          props: ['to']
+        }
+      }
+    },
+    attachTo: document.body // Important for focus management tests
+  })
+}
+```
+
+#### Testing Categories
+
+1. **Component Rendering**
+```typescript
+describe('Component Rendering', () => {
+  it('renders signup form with proper structure', () => {
+    const wrapper = mountComponent()
+    
+    expect(wrapper.find('form').exists()).toBe(true)
+    expect(wrapper.find('#email').exists()).toBe(true)
+    expect(wrapper.find('#name').exists()).toBe(true)
+    expect(wrapper.find('#password').exists()).toBe(true)
+    expect(wrapper.find('#confirmPassword').exists()).toBe(true)
+  })
+
+  it('applies proper color scheme from design system', () => {
+    const wrapper = mountComponent()
+    
+    const labels = wrapper.findAll('label')
+    labels.forEach(label => {
+      expect(label.classes()).toContain('text-breathe-dark-primary')
+    })
+
+    const inputs = wrapper.findAll('input')
+    inputs.forEach(input => {
+      expect(input.classes()).toContain('border-breathe-light-secondary')
+      expect(input.classes()).toContain('focus:ring-breathe-dark-tertiary')
+    })
+  })
+
+  it('shows loading state correctly', async () => {
+    const wrapper = mountComponent()
+    wrapper.vm.isLoading = true
+    await nextTick()
+    
+    const button = wrapper.find('button[type="submit"]')
+    expect(button.text()).toContain('Creating account')
+    expect(button.find('svg.animate-spin').exists()).toBe(true)
+  })
+})
+```
+
+2. **Form Validation**
+```typescript
+describe('Form Validation', () => {
+  it('validates required fields', async () => {
+    const wrapper = mountComponent()
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    const errors = wrapper.findAll('[role="alert"]')
+    expect(errors.length).toBeGreaterThan(0)
+    expect(wrapper.vm.validationErrors.email).toBeTruthy()
+    expect(wrapper.vm.validationErrors.name).toBeTruthy()
+    expect(wrapper.vm.validationErrors.password).toBeTruthy()
+  })
+
+  it('validates email format', async () => {
+    const wrapper = mountComponent()
+    await wrapper.find('#email').setValue('invalid-email')
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    expect(wrapper.vm.validationErrors.email).toBe('Please enter a valid email address')
+  })
+
+  it('validates password match', async () => {
+    const wrapper = mountComponent()
+    await wrapper.find('#password').setValue('password123')
+    await wrapper.find('#confirmPassword').setValue('password456')
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    expect(wrapper.vm.validationErrors.confirmPassword).toBe('Passwords do not match')
+  })
+})
+```
+
+3. **Accessibility Features**
+```typescript
+describe('Accessibility', () => {
+  it('has proper ARIA labels and roles', () => {
+    const wrapper = mountComponent()
+    
+    const inputs = wrapper.findAll('input')
+    inputs.forEach(input => {
+      expect(input.attributes('aria-label')).toBeTruthy()
+      expect(input.attributes('aria-invalid')).toBeDefined()
+    })
+
+    const alerts = wrapper.findAll('[role="alert"]')
+    alerts.forEach(alert => {
+      expect(alert.attributes('id')).toMatch(/.*-error$/)
+    })
+  })
+
+  it('maintains proper focus management', async () => {
+    const wrapper = mountComponent()
+    
+    const inputs = ['email', 'name', 'password', 'confirmPassword']
+    for (const id of inputs) {
+      const input = wrapper.find(`#${id}`)
+      await input.trigger('focus')
+      await nextTick()
+      expect(document.activeElement).toBe(input.element)
+    }
+  })
+
+  it('handles keyboard navigation', async () => {
+    const wrapper = mountComponent()
+    
+    const focusableElements = wrapper.findAll('input, button, a')
+    focusableElements.forEach(element => {
+      expect(element.classes()).toContain('focus:outline-none')
+      expect(element.classes()).toContain('focus:ring-2')
+    })
+  })
+})
+```
+
+4. **Google Authentication Integration**
+```typescript
+describe('Google Authentication', () => {
+  it('handles successful Google signup', async () => {
+    const wrapper = mountComponent()
+    const mockCredential = { credential: 'mock-token' }
+    
+    await wrapper.findComponent(GoogleAuthButton).vm.$emit('success', mockCredential)
+    await nextTick()
+    
+    expect(wrapper.vm.handleGoogleSuccess).toHaveBeenCalledWith(mockCredential)
+    expect(useRouter().push).toHaveBeenCalledWith('/')
+  })
+
+  it('handles Google signup error', async () => {
+    const wrapper = mountComponent()
+    const mockError = new Error('Google signup failed')
+    
+    await wrapper.findComponent(GoogleAuthButton).vm.$emit('error', mockError)
+    await nextTick()
+    
+    expect(wrapper.vm.handleGoogleError).toHaveBeenCalledWith(mockError)
+    expect(useToast().error).toHaveBeenCalled()
+  })
+})
+```
+
+5. **ReCAPTCHA Integration**
+```typescript
+describe('ReCAPTCHA Integration', () => {
+  it('executes reCAPTCHA on form submission', async () => {
+    const wrapper = mountComponent()
+    const mockToken = 'mock-recaptcha-token'
+    vi.spyOn(window, 'executeRecaptcha').mockResolvedValue(mockToken)
+    
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    expect(window.executeRecaptcha).toHaveBeenCalledWith('signup')
+    expect(wrapper.vm.handleSignup).toHaveBeenCalled()
+  })
+
+  it('handles reCAPTCHA failure', async () => {
+    const wrapper = mountComponent()
+    vi.spyOn(window, 'executeRecaptcha').mockRejectedValue(new Error('reCAPTCHA failed'))
+    
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    expect(useToast().error).toHaveBeenCalled()
+    expect(wrapper.vm.isLoading).toBe(false)
+  })
+})
+```
+
+6. **Error Handling**
+```typescript
+describe('Error Handling', () => {
+  it('displays API errors', async () => {
+    const wrapper = mountComponent()
+    const mockError = { detail: 'Email already exists' }
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      json: () => Promise.resolve(mockError)
+    })
+    
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    expect(useToast().error).toHaveBeenCalledWith('Email already exists')
+    expect(wrapper.vm.isLoading).toBe(false)
+  })
+
+  it('handles network errors', async () => {
+    const wrapper = mountComponent()
+    global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
+    
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    expect(useToast().error).toHaveBeenCalledWith('Failed to create account')
+    expect(wrapper.vm.isLoading).toBe(false)
+  })
+})
+```
+
 ### AboutPage.vue [DONE]
 
 The AboutPage component demonstrates testing of static content rendering, accessibility features, and styling compliance with the design system.

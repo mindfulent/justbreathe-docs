@@ -315,7 +315,7 @@ This approach provides:
 
 ##### Pages - Authentication & User Management
 18. [DONE] LoginPage.vue - Login form with email and Google authentication
-19. [TODO] SignupPage.vue
+19. [DONE] SignupPage.vue
 20. [TODO] ForgotPasswordPage.vue
 21. [TODO] ResetPasswordPage.vue
 22. [TODO] VerifyEmailPage.vue
