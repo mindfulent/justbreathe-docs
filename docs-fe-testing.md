@@ -704,6 +704,129 @@ describe('Error Handling', () => {
 })
 ```
 
+### AboutPage.vue [DONE]
+
+The AboutPage component demonstrates testing of static content rendering, accessibility features, and styling compliance with the design system.
+
+#### Test Setup
+
+```typescript
+// Mock the CardComponent to make testing card titles easier
+vi.mock('@/components/cards/CardComponent.vue', () => ({
+  default: {
+    name: 'CardComponent',
+    props: ['title', 'size'],
+    template: '<div :data-title="title"><slot></slot></div>'
+  }
+}))
+
+const mountComponent = () => {
+  return render(AboutPage)
+}
+```
+
+#### Testing Categories
+
+1. **Component Rendering**
+```typescript
+describe('Component Rendering', () => {
+  it('renders with proper structure and styling', () => {
+    const { container } = mountComponent()
+    const heading = screen.getByRole('heading', { name: /about just breathe/i })
+    
+    expect(heading).toHaveClass('text-breathe-dark-primary')
+    expect(container.querySelector('.max-w-4xl')).toBeTruthy()
+  })
+
+  it('renders all card sections', () => {
+    const { container } = mountComponent()
+    const cards = container.querySelectorAll('[data-title]')
+    const cardTitles = Array.from(cards).map(card => card.getAttribute('data-title'))
+    
+    expect(cardTitles).toContain('What is Just Breathe?')
+    expect(cardTitles).toContain('Vision')
+    expect(cardTitles).toContain('Planned Capabilities')
+    expect(cardTitles).toContain('Meet the Maker')
+    expect(cards).toHaveLength(4)
+  })
+})
+```
+
+2. **Accessibility Features**
+```typescript
+describe('Accessibility', () => {
+  it('has proper ARIA labels and roles', () => {
+    mountComponent()
+    const capabilitiesList = screen.getByRole('list', { name: /planned platform capabilities/i })
+    expect(capabilitiesList).toBeTruthy()
+  })
+
+  it('has accessible links with proper attributes', () => {
+    mountComponent()
+    const calendlyLink = screen.getByRole('button', { name: /book time with jon/i })
+    const linkedinLink = screen.getByRole('button', { name: /connect with jon on linkedin/i })
+
+    expect(calendlyLink).toHaveAttribute('href', 'https://calendly.com/jpsf/30-minute-meeting-clone')
+    expect(linkedinLink).toHaveAttribute('href', 'https://www.linkedin.com/in/jpsf/')
+  })
+
+  it('maintains proper focus management', () => {
+    mountComponent()
+    const links = screen.getAllByRole('button')
+    
+    links.forEach((link: HTMLElement) => {
+      expect(link).toHaveClass('focus:ring-2', 'focus:ring-breathe-light-secondary')
+    })
+  })
+})
+```
+
+3. **Styling and Visual Features**
+```typescript
+describe('Styling', () => {
+  it('uses correct color scheme from design system', () => {
+    mountComponent()
+    const links = screen.getAllByRole('button')
+    
+    expect(links[0]).toHaveClass('bg-breathe-dark-tertiary', 'text-white')
+    expect(links[1]).toHaveClass('bg-breathe-dark-secondary', 'text-white')
+  })
+
+  it('has proper hover states on interactive elements', () => {
+    mountComponent()
+    const links = screen.getAllByRole('button')
+    
+    links.forEach((link: HTMLElement) => {
+      expect(link).toHaveClass('hover:bg-breathe-light-primary')
+    })
+  })
+
+  it('has proper touch target sizes', () => {
+    mountComponent()
+    const links = screen.getAllByRole('button')
+    
+    links.forEach((link: HTMLElement) => {
+      expect(link).toHaveClass('min-w-[200px]', 'py-2', 'px-4')
+    })
+  })
+})
+```
+
+4. **Key Testing Points**
+- Verifies all required content sections are present
+- Ensures proper heading hierarchy
+- Checks accessibility of interactive elements
+- Validates color scheme compliance
+- Tests focus management and keyboard navigation
+- Verifies touch target sizes for mobile usability
+
+5. **Testing Best Practices Demonstrated**
+- Use of semantic queries (getByRole) for better accessibility testing
+- Testing of both visual and functional aspects
+- Comprehensive ARIA attribute verification
+- Proper touch target size verification for mobile
+- Color scheme compliance testing
+
 ### Testing Best Practices
 
 1. **Component Mounting**
