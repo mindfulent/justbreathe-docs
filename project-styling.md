@@ -343,7 +343,7 @@ This approach provides:
 42. [x] ClientsPage.vue
 43. [ ] ClientDetailsPage.vue
 44. [ ] FormsPage.vue
-45. [ ] EmailTemplatesPage.vue
+45. [x] EmailTemplatesPage.vue
 46. [ ] NotificationsPage.vue
 47. [ ] NotificationSettingsPage.vue
 48. [ ] NotificationTestPage.vue
