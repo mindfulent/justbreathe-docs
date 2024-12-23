@@ -4,37 +4,48 @@
 
 This styling implementation project aims to standardize the visual design across all 51 components and pages while preserving existing functionality. For each file, implement the defined color palette using Tailwind classes and CSS variables, maintain WCAG 2.1 accessibility compliance, and ensure all interactive elements retain their current behavior. Test each styled component in isolation and in context to verify both visual consistency and functional integrity. Update the checklist status from [TODO] to [DONE] only after thorough testing confirms no regression in component functionality.
 
-## Color Palette
+## Color Palette and Text Contrast Guidelines
 
 Our color palette is designed to create a calming, professional experience that aligns with our brand values of simplicity and effortless growth.
 
+### Critical Text Contrast Rule
+
+**IMPORTANT**: Always follow this fundamental rule for text contrast:
+- Use white text (#FFFFFF) on dark background colors (dark-primary, dark-secondary, dark-tertiary)
+- Use dark text (dark-primary) on light background colors (light-primary, light-secondary)
+
+This rule is non-negotiable and ensures both accessibility compliance and visual consistency across the application. When in doubt, always err on the side of higher contrast.
+
 ### Dark Colors
 
-| Name           | Hex Code | Usage                                    |
-|----------------|----------|------------------------------------------|
-| Primary Dark   | #162521  | Primary text, headings (e.g., "Breathe Easy, Grow Effortlessly") |
-| Secondary Dark | #3a4a4a  | Footer background, secondary UI elements |
-| Tertiary Dark  | #896978  | Call-to-action buttons (e.g., "Sign Up") |
+| Name           | Hex Code | Usage                                    | Text Color |
+|----------------|----------|------------------------------------------|------------|
+| Primary Dark   | #162521  | Primary text, headings | White |
+| Secondary Dark | #3a4a4a  | Footer background, secondary UI elements | White |
+| Tertiary Dark  | #896978  | Call-to-action buttons, interactive elements | White |
 
 ### Light Colors
 
-| Name            | Hex Code | Usage                                    |
-|-----------------|----------|------------------------------------------|
-| Primary Light   | #839791  | Icons, decorative elements              |
-| Secondary Light | #8a9290  | Input borders, subtle UI elements       |
+| Name            | Hex Code | Usage                                    | Text Color |
+|-----------------|----------|------------------------------------------|------------|
+| Primary Light   | #839791  | Icons, decorative elements              | Dark Primary |
+| Secondary Light | #8a9290  | Input borders, subtle UI elements       | Dark Primary |
 
 ### Usage Guidelines
 
 1. **Text Hierarchy**
-   - Use Primary Dark (#162521) for main headings and important text
-   - Use Secondary Dark (#3a4a4a) for secondary text and UI elements
+   - Use Primary Dark (#162521) for main headings and important text on light backgrounds
+   - Use white (#FFFFFF) for text on any dark background colors
+   - Never use light text colors on light backgrounds
 
 2. **Interactive Elements**
-   - Use Tertiary Dark (#896978) for primary call-to-action buttons
-   - Use Primary Light (#839791) for icons and interactive decorative elements
+   - Use Tertiary Dark (#896978) with white text for primary call-to-action buttons
+   - Use Primary Light (#839791) with dark text for secondary actions
+   - Maintain consistent hover states within each color group
 
 3. **Form Elements**
    - Use Secondary Light (#8a9290) for input borders and form element outlines
+   - Always use dark text for input fields
 
 ### Accessibility
 
@@ -130,17 +141,17 @@ This approach provides:
 - Flexibility between utility classes and CSS variables
 - TypeScript support through Tailwind's type system
 
-#### 6. [TODO] Frontend Components and Pages that need to be styled
+#### 6. Frontend Components and Pages that need to be styled
 
 ##### Core Components
 1. [DONE] NavigationBar.vue
 2. [DONE] FooterBar.vue
-3. [DONE] TabComponent.vue
-4. [DONE] ToastContent.vue
+3. [TODO] TabComponent.vue
+4. [TODO] ToastContent.vue
 
 ##### Interactive Components
-5. [DONE] GoogleAuthButton.vue
-6. [DONE] IntakeForm.vue
+5. [TODO] GoogleAuthButton.vue
+6. [TODO] IntakeForm.vue
 7. [TODO] ServiceTemplateCard.vue
 8. [TODO] ServiceTemplatesGrid.vue
 9. [TODO] SelectADate.vue
@@ -148,14 +159,14 @@ This approach provides:
 11. [TODO] AvailableTimeSlots.vue
 
 ##### Notification Components
-12. [DONE] NotificationList.vue
-13. [DONE] NotificationItem.vue
+12. [TODO] NotificationList.vue
+13. [TODO] NotificationItem.vue
 
 ##### Effect Components
-14. [DONE] SnowEffect.vue
-15. [DONE] ConfettiEffect.vue
-16. [DONE] BackgroundVideo.vue
-17. [DONE] BadgeAwardModal.vue
+14. [TODO] SnowEffect.vue
+15. [TODO] ConfettiEffect.vue
+16. [TODO] BackgroundVideo.vue
+17. [TODO] BadgeAwardModal.vue
 
 ##### Pages - Authentication & User Management
 18. [TODO] LoginPage.vue
