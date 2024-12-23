@@ -316,7 +316,7 @@ This approach provides:
 ##### Pages 
 18. [DONE] LoginPage.vue
 19. [DONE] SignupPage.vue
-20. [TODO] ForgotPasswordPage.vue
+20. [DONE] ForgotPasswordPage.vue
 21. [TODO] ResetPasswordPage.vue
 22. [DONE] VerifyEmailPage.vue
 23. [TODO] CheckYourEmailPage.vue

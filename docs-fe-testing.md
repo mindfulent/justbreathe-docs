@@ -1228,3 +1228,197 @@ describe('Accessibility', () => {
 - Proper ARIA attribute verification
 - Component mounting with initial state
 - Testing of dynamic content updates
+
+### ForgotPasswordPage.vue [DONE]
+
+The ForgotPasswordPage component demonstrates testing of form validation, loading states, and accessibility features for the password reset request interface.
+
+#### Test Setup
+
+```typescript
+const mountComponent = () => {
+  // Create a test pinia instance
+  const pinia = createTestingPinia({
+    createSpy: vi.fn
+  })
+
+  // Mock fetch globally
+  const mockFetch = vi.fn();
+  global.fetch = mockFetch;
+
+  // Mount with dependencies
+  return mount(ForgotPasswordPage, {
+    global: {
+      plugins: [pinia],
+      components: {
+        'CardComponent': mockCardComponent
+      }
+    }
+  })
+}
+```
+
+#### Testing Categories
+
+1. **Component Rendering**
+```typescript
+describe('Component Rendering', () => {
+  it('renders with proper structure and styling', () => {
+    const wrapper = mountComponent()
+    
+    // Check form structure
+    const form = wrapper.find('form')
+    expect(form.exists()).toBe(true)
+    expect(form.attributes('aria-labelledby')).toBe('forgot-password-title')
+    
+    // Check input field
+    const emailInput = wrapper.find('#email')
+    expect(emailInput.exists()).toBe(true)
+    expect(emailInput.attributes('type')).toBe('email')
+    expect(emailInput.attributes('required')).toBe('')
+    
+    // Check button
+    const submitButton = wrapper.find('button[type="submit"]')
+    expect(submitButton.exists()).toBe(true)
+    expect(submitButton.text()).toContain('Send password reset request')
+  })
+
+  it('applies proper color scheme from design system', () => {
+    const wrapper = mountComponent()
+    
+    // Check label color
+    const label = wrapper.find('label')
+    expect(label.classes()).toContain('text-breathe-dark-primary')
+    
+    // Check input border color
+    const input = wrapper.find('#email')
+    expect(input.classes()).toContain('border-breathe-light-secondary')
+    expect(input.classes()).toContain('focus:ring-breathe-dark-tertiary')
+    
+    // Check button color
+    const button = wrapper.find('button[type="submit"]')
+    expect(button.classes()).toContain('bg-breathe-dark-tertiary')
+  })
+})
+```
+
+2. **Accessibility Features**
+```typescript
+describe('Accessibility', () => {
+  it('has proper ARIA labels and roles', () => {
+    const wrapper = mountComponent()
+    
+    // Check form ARIA attributes
+    const form = wrapper.find('form')
+    expect(form.attributes('aria-labelledby')).toBe('forgot-password-title')
+    
+    // Check input ARIA attributes
+    const emailInput = wrapper.find('#email')
+    expect(emailInput.attributes('aria-label')).toBe('Enter your email address to reset your password')
+    expect(emailInput.attributes('aria-required')).toBe('true')
+    
+    // Check button ARIA attributes
+    const button = wrapper.find('button[type="submit"]')
+    expect(button.attributes('aria-busy')).toBe('false')
+  })
+
+  it('maintains proper focus management', async () => {
+    const wrapper = mountComponent()
+    const emailInput = wrapper.find('#email')
+    const submitButton = wrapper.find('button[type="submit"]')
+    
+    // Test focus on input
+    await emailInput.trigger('focus')
+    expect(document.activeElement).toBe(emailInput.element)
+    
+    // Test focus on button
+    await submitButton.trigger('focus')
+    expect(document.activeElement).toBe(submitButton.element)
+  })
+})
+```
+
+3. **Loading States**
+```typescript
+describe('Loading States', () => {
+  it('handles loading state correctly', async () => {
+    const wrapper = mountComponent()
+    
+    // Submit form
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    // Check loading state
+    const button = wrapper.find('button[type="submit"]')
+    expect(button.attributes('disabled')).toBe('')
+    expect(button.attributes('aria-busy')).toBe('true')
+    expect(button.text()).toContain('Sending')
+  })
+
+  it('disables form during submission', async () => {
+    const wrapper = mountComponent()
+    
+    // Submit form
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    // Check input disabled state
+    const emailInput = wrapper.find('#email')
+    expect(emailInput.attributes('disabled')).toBe('')
+  })
+})
+```
+
+4. **Form Submission**
+```typescript
+describe('Form Submission', () => {
+  it('stores email in localStorage and redirects on success', async () => {
+    const wrapper = mountComponent()
+    const email = 'test@example.com'
+    
+    // Set email and submit
+    await wrapper.find('#email').setValue(email)
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    // Check localStorage
+    expect(localStorage.getItem('pendingVerificationEmail')).toBe(email)
+    
+    // Check navigation
+    expect(router.push).toHaveBeenCalledWith('/check-your-email')
+  })
+
+  it('handles API errors correctly', async () => {
+    const wrapper = mountComponent()
+    mockFetch.mockResolvedValue({
+      ok: false,
+      json: () => Promise.resolve({ detail: 'Invalid email' })
+    })
+    
+    // Submit form
+    await wrapper.find('form').trigger('submit')
+    await nextTick()
+    
+    // Check error handling
+    expect(wrapper.emitted('error')).toBeTruthy()
+    expect(localStorage.getItem('pendingVerificationEmail')).toBeNull()
+  })
+})
+```
+
+5. **Key Testing Points**
+- Verifies proper form structure and styling
+- Tests loading state transitions
+- Validates ARIA attributes for accessibility
+- Ensures proper email validation
+- Checks error handling and user feedback
+- Verifies localStorage integration
+- Tests navigation flow
+
+6. **Testing Best Practices Demonstrated**
+- Use of async/await for state changes
+- Proper ARIA attribute verification
+- Component mounting with dependencies
+- Mock API response handling
+- Testing of error scenarios
+- Validation of user feedback
