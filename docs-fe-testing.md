@@ -1066,86 +1066,158 @@ describe('Styling', () => {
 - Proper touch target size verification for mobile
 - Color scheme compliance testing
 
-### Testing Best Practices
+### BadgeAwardModal.vue [DONE]
 
-1. **Component Mounting**
-   - Use `mountWithDeps` helper for consistent dependency injection
-   - Wait for router and component updates using `await`
-   - Provide necessary route configuration
+The BadgeAwardModal component demonstrates testing of modal interactions, accessibility features, and styling compliance with the design system.
 
-2. **Accessibility Testing**
-   - Verify ARIA roles and labels
-   - Test keyboard navigation features
-   - Check focus management
-   - Ensure proper color contrast
-   - Test screen reader compatibility
+#### Test Setup
 
-3. **Style Testing**
-   - Focus on functional styles (hover, focus states)
-   - Test responsive behavior
-   - Verify color scheme implementation
-   - Check transition classes
-
-4. **Interactive Features**
-   - Test user interactions (clicks, keyboard events)
-   - Verify state changes
-   - Check proper ARIA attribute updates
-   - Test mobile responsiveness
-
-5. **Test Organization**
-   - Group related tests logically
-   - Use descriptive test names
-   - Keep tests focused and atomic
-   - Add comments for complex assertions
-
-### Common Testing Patterns
-
-1. **Finding Elements**
 ```typescript
-// By role
-wrapper.find('[role="navigation"]')
+const defaultProps = {
+  modelValue: true,
+  badgeName: 'Test Badge',
+  description: 'This is a test badge description',
+  imageUrl: 'test_badge.svg',
+  isNewBadge: true,
+  earnedAt: '2024-01-01T12:00:00.000Z',
+}
 
-// By ARIA attribute
-wrapper.find('[aria-expanded="false"]')
-
-// By class
-wrapper.find('.logo-text')
-
-// By test ID
-wrapper.find('[data-testid="nav-container"]')
+// Mock the logger
+vi.mock('@/utils/logger', () => ({
+  logger: {
+    debug: vi.fn(),
+  },
+}))
 ```
 
-2. **Checking Classes**
-```typescript
-// Single class
-expect(element.classes()).toContain('text-white')
+#### Testing Categories
 
-// Multiple classes
-expect(element.classes()).toContain('focus:outline-none')
-expect(element.classes()).toContain('focus:ring-2')
+1. **Component Rendering**
+```typescript
+describe('Component Rendering', () => {
+  it('renders with proper structure and styling', () => {
+    const { getByRole, getByText } = render(BadgeAwardModal, {
+      props: defaultProps,
+    })
+
+    // Check modal structure
+    const dialog = getByRole('dialog')
+    expect(dialog).toHaveClass('modal-overlay')
+    expect(dialog).toHaveClass('bg-breathe-dark-primary')
+
+    // Check header
+    const title = getByText('Congratulations!')
+    expect(title).toHaveClass('text-breathe-dark-primary')
+
+    // Check content
+    const description = getByText(defaultProps.description)
+    expect(description).toHaveClass('text-breathe-dark-primary')
+  })
+
+  it('applies proper color scheme from design system', () => {
+    const { container } = render(BadgeAwardModal, {
+      props: defaultProps,
+    })
+
+    // Check border colors
+    const borders = container.querySelectorAll('.border-breathe-light-secondary')
+    expect(borders.length).toBeGreaterThan(0)
+
+    // Check text colors
+    const primaryText = container.querySelectorAll('.text-breathe-dark-primary')
+    expect(primaryText.length).toBeGreaterThan(0)
+  })
+})
 ```
 
-3. **Testing Attributes**
+2. **Accessibility Features**
 ```typescript
-// ARIA attributes
-expect(element.attributes('aria-label')).toBe('Main navigation')
-expect(element.attributes('aria-expanded')).toBe('false')
+describe('Accessibility', () => {
+  it('has proper ARIA labels and roles', () => {
+    const { getByRole } = render(BadgeAwardModal, {
+      props: defaultProps,
+    })
 
-// Regular attributes
-expect(element.attributes('href')).toBe('#main-content')
+    const dialog = getByRole('dialog')
+    expect(dialog).toHaveAttribute('aria-modal', 'true')
+    expect(dialog).toHaveAttribute('aria-labelledby')
+
+    const closeButton = getByRole('button')
+    expect(closeButton).toHaveAttribute('aria-label', 'Close badge details')
+  })
+
+  it('has accessible images with alt text', () => {
+    const { getByRole } = render(BadgeAwardModal, {
+      props: defaultProps,
+    })
+
+    const badgeImage = getByRole('img')
+    expect(badgeImage).toHaveAttribute('alt', defaultProps.badgeName)
+    expect(badgeImage).toHaveAttribute('aria-label', `${defaultProps.badgeName} badge image`)
+  })
+})
 ```
 
-4. **Testing Events**
+3. **Interactivity**
 ```typescript
-// Click events
-await element.trigger('click')
-await wrapper.vm.$nextTick()
+describe('Interactivity', () => {
+  it('closes modal on button click', async () => {
+    const { getByRole, emitted } = render(BadgeAwardModal, {
+      props: defaultProps,
+    })
 
-// Keyboard events
-await element.trigger('keyup.enter')
-await wrapper.vm.$nextTick()
+    const closeButton = getByRole('button')
+    await fireEvent.click(closeButton)
 
+    expect(emitted()['update:modelValue']).toBeTruthy()
+    expect(emitted()['update:modelValue'][0]).toEqual([false])
+  })
+
+  it('closes modal on escape key', async () => {
+    const { getByRole, emitted } = render(BadgeAwardModal, {
+      props: defaultProps,
+    })
+
+    const dialog = getByRole('dialog')
+    await fireEvent.keyDown(dialog, { key: 'Escape' })
+
+    expect(emitted()['update:modelValue']).toBeTruthy()
+  })
+})
 ```
+
+4. **Responsive Behavior**
+```typescript
+describe('Responsive Behavior', () => {
+  it('maintains minimum touch target sizes', () => {
+    const { getByRole } = render(BadgeAwardModal, {
+      props: defaultProps,
+    })
+
+    const closeButton = getByRole('button')
+    expect(closeButton.className).toContain('min-h-[44px]')
+    expect(closeButton.className).toContain('min-w-[100px]')
+  })
+})
+```
+
+5. **Key Testing Points**
+- Verifies modal structure and styling
+- Tests accessibility features and ARIA attributes
+- Validates keyboard interactions (Escape key)
+- Checks touch target sizes for mobile
+- Tests event emissions
+- Verifies proper date formatting
+- Tests notification marking functionality
+
+6. **Testing Best Practices Demonstrated**
+- Use of semantic queries (getByRole) for better accessibility testing
+- Testing of both visual and functional aspects
+- Comprehensive ARIA attribute verification
+- Proper touch target size verification for mobile
+- Color scheme compliance testing
+- Event emission testing
+- Focus management testing
 
 ### VerifyEmailPage.vue [DONE]
 
