@@ -1144,3 +1144,87 @@ await wrapper.vm.$nextTick()
 // Keyboard events
 await element.trigger('keyup.enter')
 await wrapper.vm.$nextTick()
+
+```
+
+### VerifyEmailPage.vue [DONE]
+
+The VerifyEmailPage component demonstrates testing of email verification flow, loading states, and accessibility features.
+
+#### Test Setup
+
+```typescript
+const mountComponent = (initialData: InitialData = {}) => {
+  const wrapper = mount(VerifyEmailPage, {
+    global: {
+      plugins: [createTestingPinia()],
+      components: {
+        CardComponent: mockCardComponent
+      }
+    }
+  })
+
+  // Set the initial state for refs
+  if (initialData.isVerifying !== undefined) {
+    wrapper.vm.isVerifying = initialData.isVerifying
+  }
+  if (initialData.email !== undefined) {
+    wrapper.vm.email = initialData.email
+  }
+
+  return wrapper
+}
+```
+
+#### Testing Categories
+
+1. **Component Rendering**
+```typescript
+describe('Component Rendering', () => {
+  it('renders with proper structure', () => {
+    const wrapper = mountComponent()
+    
+    // Check main container
+    const container = wrapper.find('div')
+    expect(container.classes()).toContain('flex')
+    expect(container.classes()).toContain('items-start')
+    expect(container.classes()).toContain('justify-center')
+    
+    // Check card exists
+    expect(wrapper.findComponent({ name: 'CardComponent' }).exists()).toBe(true)
+  })
+})
+```
+
+2. **Accessibility Features**
+```typescript
+describe('Accessibility', () => {
+  it('has proper ARIA labels and roles', async () => {
+    const wrapper = mountComponent({ isVerifying: true })
+    await nextTick()
+    
+    // Check status container
+    const status = wrapper.find('[role="status"]')
+    expect(status.exists()).toBe(true)
+    expect(status.attributes('aria-busy')).toBe('true')
+    
+    // Check loading spinner
+    const spinner = wrapper.find('[role="progressbar"]')
+    expect(spinner.exists()).toBe(true)
+    expect(spinner.attributes('aria-label')).toBe('Verifying email')
+  })
+})
+```
+
+3. **Key Testing Points**
+- Verifies proper component structure
+- Tests loading state transitions
+- Validates ARIA attributes for accessibility
+- Ensures proper email verification flow
+- Checks responsive layout
+
+4. **Testing Best Practices Demonstrated**
+- Use of async/await for state changes
+- Proper ARIA attribute verification
+- Component mounting with initial state
+- Testing of dynamic content updates
