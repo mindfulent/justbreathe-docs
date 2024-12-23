@@ -1,3 +1,0 @@
-# Instructions
-
-Hey Claude. We've just finished a migration from vuex to pinia and from sync to async db calls. We're now upgrading our frontend test suite to fix test failures. Can you cd frontend and npm run test and begin systematically fixing the test failures? Let me know if you need help. Good luck!...
