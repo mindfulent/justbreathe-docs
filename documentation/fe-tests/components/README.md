@@ -11,7 +11,7 @@ This directory contains detailed documentation for each styled and tested compon
 1. [x] NavigationBar.vue
 2. [x] FooterBar.vue
 3. [x] PromptModal.vue
-4. [ ] TabComponent.vue
+4. [x] PillTabs.vue
 5. [ ] ToastContent.vue
 
 ##### Interactive Components
