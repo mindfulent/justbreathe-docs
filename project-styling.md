@@ -290,7 +290,7 @@ This approach provides:
 
 ##### Core Components
 1. [DONE] NavigationBar.vue
-2. [TODO] FooterBar.vue
+2. [DONE] FooterBar.vue
 3. [TODO] TabComponent.vue
 4. [TODO] ToastContent.vue
 
