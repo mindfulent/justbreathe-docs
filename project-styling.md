@@ -1,4 +1,4 @@
-# Just Breathe - Project Styling and Accessibility Guide
+# Just Breathe - Styling, Accessibility and Frontend Testing Plan
 
 ## Project Overview and Instructions
 
@@ -289,8 +289,8 @@ This approach provides:
 #### 6. Frontend Components and Pages that need to be styled
 
 ##### Core Components
-1. [NEEDS UPDATED] NavigationBar.vue
-2. [NEEDS UPDATED] FooterBar.vue
+1. [DONE] NavigationBar.vue
+2. [TODO] FooterBar.vue
 3. [TODO] TabComponent.vue
 4. [TODO] ToastContent.vue
 
@@ -373,12 +373,36 @@ Last Updated: 2024-12-22 7:56 AM
 7. Effect Components (#14-17)
 8. Remaining Pages and Components
 
+## Documentation Workflow
+
+### Frontend Testing Documentation
+All frontend testing documentation should follow this workflow:
+
+1. When completing items in this style guide:
+   - First implement the required changes
+   - Write and verify all tests
+   - Document the testing approach in `docs/docs-fe-testing.md`
+
+2. Documentation Priority:
+   - `docs/docs-fe-testing.md` is the source of truth for all frontend testing documentation
+   - Testing approaches, patterns, and examples should be documented there
+   - This style guide references testing requirements but defers to `docs/docs-fe-testing.md` for implementation details
+
+3. Documentation Update Process:
+   - After completing a component's styling and testing
+   - Add testing documentation to `docs/docs-fe-testing.md`
+   - Update the component's status to [DONE] in this file
+
 ## Testing Standards
 
+For detailed testing documentation, patterns, and examples, refer to `docs/docs-fe-testing.md`.
+
+This section provides a high-level overview of testing requirements. For implementation details, always consult `docs/docs-fe-testing.md`.
+
 ### Testing Framework
-- [x] Vitest as the primary testing framework
-- [x] @testing-library/vue for component testing
-- [x] @testing-library/jest-dom for enhanced DOM assertions
+- [DONE] Vitest as the primary testing framework
+- [DONE] @testing-library/vue for component testing
+- [DONE] @testing-library/jest-dom for enhanced DOM assertions
 
 ### Accessibility Testing
 1. Manual Testing
@@ -463,3 +487,101 @@ npm run test:watch
 # Run specific test file
 npm run test path/to/file.spec.ts
 ```
+
+## Appendix A: Frontend Testing Strategy
+
+### Testing Framework and Setup
+The project uses Vitest as the main testing framework, configured in `vitest.config.js/ts`. Key features include:
+- JSDOM environment for DOM manipulation
+- Global test setup files
+- Code coverage reporting
+- Test UI interface available
+
+### Test Location Convention
+- Tests should be placed in `__tests__` directories next to the code being tested
+- Test files should follow the naming pattern: `*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`
+
+### Available Testing Commands
+```bash
+npm run test           # Run tests in watch mode
+npm run test:coverage  # Run tests with coverage report
+npm run test:ui        # Run tests with UI interface
+npm run test:health    # Run API health check tests
+```
+
+### Testing Utilities and Mocks
+The project provides several utilities and mocks in `src/test/setup.ts`:
+- IntersectionObserver mock
+- ResizeObserver mock
+- matchMedia mock
+- localStorage mock
+
+Additional testing utilities in `src/test/test-utils.ts`:
+- Pinia store setup helpers
+- Test router creation
+- Mock API responses
+
+### Testing Libraries
+- `@testing-library/vue` for component testing
+- `@testing-library/jest-dom` for DOM assertions
+- `@vue/test-utils` for Vue component testing
+- `@pinia/testing` for Pinia store testing
+
+### Example Test File Structures
+
+1. Component Tests:
+```typescript
+// src/components/__tests__/MyComponent.spec.ts
+import { describe, it, expect } from 'vitest'
+import { mount } from '@vue/test-utils'
+import MyComponent from '../MyComponent.vue'
+
+describe('MyComponent', () => {
+  it('renders correctly', () => {
+    const wrapper = mount(MyComponent)
+    expect(wrapper.exists()).toBe(true)
+  })
+})
+```
+
+2. Utility/Service Tests:
+```typescript
+// src/utils/__tests__/myUtil.spec.ts
+import { describe, it, expect } from 'vitest'
+import { myUtilFunction } from '../myUtil'
+
+describe('myUtil', () => {
+  it('performs expected operation', () => {
+    expect(myUtilFunction()).toBe(expectedResult)
+  })
+})
+```
+
+3. Store Tests:
+```typescript
+// src/stores/__tests__/myStore.spec.ts
+import { describe, it, expect, beforeEach } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
+import { useMyStore } from '../myStore'
+
+describe('MyStore', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+  
+  it('updates state correctly', () => {
+    const store = useMyStore()
+    store.someAction()
+    expect(store.someState).toBe(expectedValue)
+  })
+})
+```
+
+### Best Practices
+1. Keep test files close to the code they're testing
+2. Use meaningful test descriptions
+3. Test both success and error cases
+4. Mock external dependencies
+5. Use the provided test utilities for common operations
+6. Include accessibility testing where relevant
+7. Aim for good test coverage of critical paths
