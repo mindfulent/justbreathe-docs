@@ -325,7 +325,7 @@ This approach provides:
 26. [TODO] SettingsPage.vue
 
 ##### Pages - Core Features
-27. [TODO] HomePage.vue
+27. [DONE] HomePage.vue
 28. [TODO] AboutPage.vue
 29. [TODO] PrivacyPolicyPage.vue
 30. [TODO] TermsPage.vue
