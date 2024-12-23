@@ -15,6 +15,7 @@ The `AddNewServiceCard` component tests cover form functionality, accessibility 
 - Tests keyboard navigation and focus management
 - Verifies required field attributes
 - Ensures proper button accessibility
+- Tests Escape key functionality for cancellation
 
 ### Form Validation
 - Tests required fields (name, description, category)
@@ -103,6 +104,7 @@ describe('AddNewServiceCard', () => {
    - Required field indicators
    - Focus management
    - Keyboard navigation
+   - Escape key handling for cancellation
 
 5. **Events**
    - submit-service event

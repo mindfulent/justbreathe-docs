@@ -15,6 +15,7 @@ The `AddNewClientCard` component tests cover form functionality, accessibility f
 - Tests keyboard navigation and focus management
 - Verifies required field attributes
 - Ensures proper button accessibility
+- Tests Escape key functionality for cancellation
 
 ### Form Validation
 - Tests required fields (name, email)
@@ -82,6 +83,7 @@ describe('AddNewClientCard', () => {
    - Required field indicators
    - Focus management
    - Keyboard navigation
+   - Escape key handling for cancellation
 
 4. **Events**
    - submit-client event

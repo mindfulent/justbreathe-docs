@@ -23,6 +23,7 @@ AddNewFormCard.vue is a form builder component that allows users to create and e
 - Test tab order through all form elements
 - Verify focus management for dynamic content
 - Ensure all interactive elements are keyboard accessible
+- Test Escape key for form cancellation
 
 #### Screen Reader Compatibility
 - Validate form structure announcement
@@ -81,6 +82,12 @@ describe('AddNewFormCard', () => {
       const nameInput = getByLabelText('Form Name')
       await fireEvent.tab()
       expect(nameInput).toHaveFocus()
+    })
+
+    it('handles Escape key for cancellation', async () => {
+      const { emitted } = render(AddNewFormCard)
+      await fireEvent.keyDown(document, { key: 'Escape' })
+      expect(emitted()['cancel-add-form']).toBeTruthy()
     })
   })
 

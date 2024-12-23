@@ -20,6 +20,7 @@ describe('Accessibility', () => {
   it('has proper ARIA labels and roles')            // Tests ARIA attributes
   it('marks required fields appropriately')         // Tests required field attributes
   it('maintains proper focus management')           // Tests focus handling
+  it('handles Escape key to cancel')                // Tests Escape key cancellation
 })
 ```
 
@@ -82,6 +83,11 @@ expect(document.activeElement).toBe(nameInput)
    - Name input
    - Subject input
    - Body textarea
+
+4. Keyboard Interaction:
+   - Tab navigation
+   - Focus management
+   - Escape key cancellation
 
 ### Component Features
 1. Form Management:
