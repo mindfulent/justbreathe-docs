@@ -1574,3 +1574,320 @@ describe('Form Submission', () => {
 - Mock API response handling
 - Testing of error scenarios
 - Validation of user feedback
+
+### ServiceTemplateCard.vue [DONE]
+
+The ServiceTemplateCard component demonstrates testing of keyboard navigation, focus management, and accessibility features for service template selection.
+
+#### Test Setup
+
+```typescript
+const mockTemplate: ServiceTemplate = {
+  id: 1,
+  template_id: 'quick-chat',
+  version: '1.0',
+  name: "Quick Chat",
+  description: "30 minutes for $30. Talk about anything on your mind.",
+  icon: "📱",
+  category: "Consultation",
+  options: [{
+    duration: 30,
+    fee: "30.00"
+  }],
+  email_template: '',
+  intake_form: '',
+  accessibility: {
+    aria_label: "Template for Quick Chat"
+  },
+  is_system: false,
+  usage_count: 0
+}
+
+const mockProps = {
+  template: mockTemplate
+}
+```
+
+#### Testing Categories
+
+1. **Component Rendering**
+```typescript
+describe('Component Rendering', () => {
+  it('renders with proper structure and styling', () => {
+    const { getByText, getByRole } = render(ServiceTemplateCard, {
+      props: { template: mockTemplate }
+    })
+
+    expect(getByText('Quick Chat')).toBeTruthy()
+    expect(getByText('30 minutes for $30. Talk about anything on your mind.')).toBeTruthy()
+    expect(getByRole('button', { name: /Use this template/i })).toBeTruthy()
+  })
+
+  it('applies proper color scheme from design system', () => {
+    const { container } = render(ServiceTemplateCard, {
+      props: { template: mockTemplate }
+    })
+
+    const button = container.querySelector('button')
+    expect(button).toHaveClass('bg-breathe-dark-tertiary')
+    expect(button).toHaveClass('text-white')
+  })
+})
+```
+
+2. **Accessibility Features**
+```typescript
+describe('Accessibility', () => {
+  it('has proper ARIA labels and roles', () => {
+    const { getByRole } = render(ServiceTemplateCard, { props: mockProps })
+    expect(getByRole('button', { name: /Template for Quick Chat/i })).toBeTruthy()
+    expect(getByRole('button', { name: /Use this template/i })).toBeTruthy()
+  })
+
+  it('maintains proper focus management', async () => {
+    const { getByRole } = render(ServiceTemplateCard, { props: mockProps })
+    const useButton = getByRole('button', { name: /Use this template/i })
+    
+    await fireEvent.click(useButton)
+    await vi.runAllTimers()
+    await vi.runAllTimers()
+    
+    expect(document.activeElement).toBe(useButton)
+  })
+
+  it('supports keyboard navigation', async () => {
+    const { getByRole, emitted } = render(ServiceTemplateCard, { props: mockProps })
+    const card = getByRole('button', { name: /Template for Quick Chat/i })
+
+    await fireEvent.keyDown(card, { key: 'Enter' })
+    await vi.runAllTimers()
+
+    expect(emitted().select).toBeTruthy()
+    expect(emitted().select[0]).toEqual([mockProps.template])
+  })
+})
+```
+
+3. **Interactivity**
+```typescript
+describe('Interactivity', () => {
+  it('emits select event when clicking Use Template button', async () => {
+    const { emitted, getByRole } = render(ServiceTemplateCard, {
+      props: { template: mockTemplate }
+    })
+
+    const button = getByRole('button', { name: /Use this template/i })
+    await fireEvent.click(button)
+
+    expect(emitted().select).toBeTruthy()
+    expect(emitted().select[0]).toEqual([mockTemplate])
+  })
+
+  it('logs template selection with proper metadata', async () => {
+    const consoleSpy = vi.spyOn(console, 'debug').mockImplementation(() => {})
+    const { getByRole } = render(ServiceTemplateCard, {
+      props: { template: mockTemplate }
+    })
+
+    const button = getByRole('button', { name: /Use this template/i })
+    await fireEvent.click(button)
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Template selected'),
+      expect.objectContaining({
+        metadata: expect.objectContaining({
+          templateId: mockTemplate.id,
+          templateName: mockTemplate.name
+        })
+      })
+    )
+  })
+})
+```
+
+4. **Responsive Behavior**
+```typescript
+describe('Responsive Behavior', () => {
+  it('maintains minimum touch target sizes', () => {
+    const { getByRole } = render(ServiceTemplateCard, {
+      props: { template: mockTemplate }
+    })
+
+    const button = getByRole('button', { name: /Use this template/i })
+    expect(button).toHaveClass('min-h-[44px]')
+  })
+})
+```
+
+### ServicesPage.vue [DONE]
+
+The ServicesPage component demonstrates testing of service management functionality, focus management, and accessibility features.
+
+#### Test Setup
+
+```typescript
+const mockTemplate: ServiceTemplate = {
+  id: 1,
+  template_id: 'quick-chat',
+  version: '1.0',
+  name: "Quick Chat",
+  description: "30 minutes for $30. Talk about anything on your mind.",
+  icon: "📱",
+  category: "Consultation",
+  options: [{ duration: 30, fee: "30.00" }],
+  email_template: '',
+  intake_form: '',
+  accessibility: { aria_label: "Template for Quick Chat" },
+  is_system: false,
+  usage_count: 0
+}
+
+vi.mock('vue-router', () => ({
+  useRouter: () => ({
+    push: vi.fn()
+  })
+}))
+```
+
+#### Testing Categories
+
+1. **Component Rendering**
+```typescript
+describe('Component Rendering', () => {
+  it('renders with proper structure', () => {
+    const { getByText, getByRole } = render(ServicesPage, {
+      global: {
+        plugins: [createTestingPinia({
+          createSpy: vi.fn,
+          initialState: {
+            auth: { isAuthenticated: true, currentUser: { id: 1 } }
+          }
+        })]
+      }
+    })
+
+    expect(getByText('Services')).toBeTruthy()
+    expect(getByRole('button', { name: /Add Service/i })).toBeTruthy()
+  })
+
+  it('shows empty state message when no services exist', () => {
+    const { getByText } = render(ServicesPage, {
+      global: {
+        plugins: [createTestingPinia({
+          createSpy: vi.fn,
+          initialState: {
+            auth: { isAuthenticated: true, currentUser: { id: 1 } },
+            services: { services: [] }
+          }
+        })]
+      }
+    })
+
+    expect(getByText(/You haven't added any services yet/i)).toBeTruthy()
+  })
+})
+```
+
+2. **Service Management**
+```typescript
+describe('Service Management', () => {
+  it('creates service from template when selected', async () => {
+    render(ServicesPage, {
+      global: {
+        plugins: [createTestingPinia({
+          createSpy: vi.fn,
+          initialState: {
+            auth: { isAuthenticated: true, currentUser: { id: 1 } }
+          }
+        })]
+      }
+    })
+
+    const servicesStore = useServicesStore()
+    await servicesStore.createService(mockServiceData)
+
+    expect(servicesStore.createService).toHaveBeenCalledWith(mockServiceData)
+  })
+
+  it('displays error message when service fetch fails', async () => {
+    const { getByRole } = render(ServicesPage, {
+      global: {
+        plugins: [createTestingPinia({
+          createSpy: vi.fn,
+          initialState: {
+            auth: { isAuthenticated: true, currentUser: { id: 1 } },
+            services: { error: 'Failed to fetch services' }
+          }
+        })]
+      }
+    })
+
+    expect(getByRole('alert')).toHaveTextContent('Failed to fetch services')
+  })
+})
+```
+
+3. **Accessibility Features**
+```typescript
+describe('Accessibility', () => {
+  it('has proper ARIA labels and roles', () => {
+    const { getByRole } = render(ServicesPage, {
+      global: {
+        plugins: [createTestingPinia({
+          createSpy: vi.fn,
+          initialState: {
+            auth: { isAuthenticated: true, currentUser: { id: 1 } }
+          }
+        })]
+      }
+    })
+
+    expect(getByRole('toolbar', { name: /Service management actions/i })).toBeTruthy()
+    expect(getByRole('region', { name: /Your services section/i })).toBeTruthy()
+  })
+
+  it('maintains proper focus management', async () => {
+    const { getByRole } = render(ServicesPage, {
+      global: {
+        plugins: [createTestingPinia({
+          createSpy: vi.fn,
+          initialState: {
+            auth: { isAuthenticated: true, currentUser: { id: 1 } }
+          }
+        })],
+        stubs: {
+          'router-link': true
+        }
+      }
+    })
+
+    const addButton = getByRole('button', { name: /Add Service/i })
+    await fireEvent.click(addButton)
+    await vi.runAllTimers()
+    
+    const cancelButton = getByRole('button', { name: /Cancel/i })
+    await fireEvent.click(cancelButton)
+    
+    await vi.runAllTimers()
+    await vi.runAllTimers()
+    
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('Add Service')
+  })
+})
+```
+
+4. **Key Testing Points**
+- Verifies proper component structure and styling
+- Tests service creation and management functionality
+- Validates ARIA attributes for accessibility
+- Ensures proper focus management after form interactions
+- Tests error handling and user feedback
+- Verifies responsive behavior
+
+5. **Testing Best Practices Demonstrated**
+- Use of semantic queries (getByRole) for better accessibility testing
+- Testing of both visual and functional aspects
+- Comprehensive ARIA attribute verification
+- Proper focus management testing
+- Mock store and router integration
+- Error scenario testing

@@ -297,7 +297,7 @@ This approach provides:
 ##### Interactive Components
 5. [TODO] GoogleAuthButton.vue
 6. [TODO] IntakeForm.vue
-7. [TODO] ServiceTemplateCard.vue
+7. [DONE] ServiceTemplateCard.vue
 8. [TODO] ServiceTemplatesGrid.vue
 9. [TODO] SelectADate.vue
 10. [TODO] SelectATimezone.vue
@@ -328,7 +328,7 @@ This approach provides:
 29. [TODO] PrivacyPolicyPage.vue
 30. [TODO] TermsPage.vue
 31. [TODO] FeedbackPage.vue
-32. [TODO] ServicesPage.vue
+32. [DONE] ServicesPage.vue
 33. [TODO] ServiceDetailsPage.vue
 34. [TODO] NewServicePage.vue
 35. [TODO] BookServicePage.vue
