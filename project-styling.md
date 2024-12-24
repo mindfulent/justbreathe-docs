@@ -17,6 +17,7 @@
 - [x] ClientsPage.vue
 - [x] EmailTemplatesPage.vue
 - [x] PillTabs.vue
+- [x] BookServicePage.vue
 
 ## Project Overview and Instructions
 
@@ -330,7 +331,7 @@ This approach provides:
 16. [ ] ServiceTemplatesGrid.vue
 17. [ ] SelectADate.vue
 18. [ ] SelectATimezone.vue
-19. [ ] AvailableTimeSlots.vue
+19. [x] AvailableTimeSlots.vue
 20. [ ] NotificationList.vue
 21. [ ] NotificationItem.vue
 22. [ ] SnowEffect.vue
