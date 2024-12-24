@@ -20,6 +20,7 @@ Verifies that the component renders correctly with default props:
 - Component title
 - Description text
 - Button text for both silent and audio modes
+- Audio file import handling
 
 ```typescript
 it('renders properly with default props', () => {
@@ -45,6 +46,7 @@ Ensures the component is fully accessible to screen readers and assistive techno
    - Phase announcements via live regions
    - Screen reader instructions
    - Audio mode state changes
+   - Visualization hiding in audio-only mode
 
 ```typescript
 it('has proper ARIA attributes in initial state', () => {
@@ -61,26 +63,34 @@ it('has proper ARIA attributes in initial state', () => {
 
 ### Audio Mode Tests
 
-Tests the audio-only mode functionality:
+Tests the enhanced audio-only mode functionality:
 
 1. **Audio Playback**
-   - Proper initialization of audio
-   - Looping behavior
+   - Proper initialization of audio with Vite asset imports
+   - Continuous looping behavior
    - Cleanup on stop
+   - Audio file path handling
 
 2. **Visual Elements**
-   - Hide timer and animations
+   - Complete hiding of timer and animations in audio mode
    - Maintain accessibility information
    - Screen reader announcements
+   - Clear mode switching
 
 3. **Audio Controls**
    - Start/stop functionality
    - State management
    - Error handling
+   - Audio reset on stop
 
 ```typescript
 describe('Audio Mode', () => {
   beforeEach(() => {
+    // Mock audio file import
+    vi.mock('@/assets/sounds/breathing.wav', () => ({
+      default: 'mocked-audio-file-path'
+    }))
+
     mockAudio = {
       play: vi.fn().mockResolvedValue(undefined),
       pause: vi.fn(),
@@ -97,6 +107,14 @@ describe('Audio Mode', () => {
     expect(mockAudio.play).toHaveBeenCalled()
     expect(mockAudio.loop).toBe(true)
   })
+
+  it('hides visualizations in audio-only mode', async () => {
+    const audioButton = wrapper.findAll('button')[1]
+    await audioButton.trigger('click')
+    
+    expect(wrapper.find('.animate-breath').exists()).toBe(false)
+    expect(wrapper.find('[role="timer"]').exists()).toBe(false)
+  })
 })
 ```
 
@@ -109,17 +127,20 @@ Tests the core breathing exercise features:
    - Initial countdown value
    - Phase setting
    - Mode-specific behavior (silent vs audio)
+   - Audio file loading
 
 2. **Complete Breathing Cycle**
    - Inhale phase (4 seconds)
    - Hold phase (7 seconds)
    - Exhale phase (8 seconds)
    - Cycle count increment
+   - Continuous audio in audio mode
 
 3. **Exercise Stop**
    - State reset
    - UI updates
-   - Audio cleanup
+   - Audio cleanup and reset
+   - Mode reset
 
 ### Event Emissions
 
@@ -127,13 +148,14 @@ Verifies proper event communication:
 
 1. **Start Event**
    - Emitted when exercise begins
-   - Includes mode information
+   - Includes mode information (silent/audio)
 
 2. **Phase Change Events**
    - Inhale phase ('in')
    - Hold phase ('hold')
    - Exhale phase ('out')
    - Proper timing in both modes
+   - Audio synchronization
 
 ## Test Setup
 
@@ -142,9 +164,15 @@ The test suite uses:
 - Vue Test Utils for component mounting
 - Fake timers for time-based testing
 - Audio API mocking for audio mode tests
+- Vite asset handling mocks
 
 ```typescript
 beforeEach(() => {
+  // Mock audio file import
+  vi.mock('@/assets/sounds/breathing.wav', () => ({
+    default: 'mocked-audio-file-path'
+  }))
+
   // Mock Audio API
   mockAudio = {
     play: vi.fn().mockResolvedValue(undefined),
@@ -174,6 +202,7 @@ The test suite specifically verifies:
 5. Timer state communication
 6. Audio mode accessibility
 7. Mode-specific announcements
+8. Clear mode switching feedback
 
 ## Running the Tests
 
@@ -195,4 +224,6 @@ Potential areas for test expansion:
 5. Additional screen reader announcement patterns
 6. Audio volume control testing
 7. Network error handling for audio files
-8. Different audio file formats support 
+8. Different audio file formats support
+9. Audio preloading strategies
+10. Cross-browser audio compatibility 
