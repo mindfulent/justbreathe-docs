@@ -18,6 +18,7 @@ This document outlines the test coverage for the `ServicePublicCard` component, 
 ### Interactivity
 - ✅ Handles booking service option clicks
 - ✅ Logs appropriate debug information
+- ✅ Navigates to booking page with correct parameters
 - ✅ Triggers correct events
 
 ### Fee Formatting
@@ -41,6 +42,12 @@ vi.mock('@/utils/logger', () => ({
     info: vi.fn()
   }
 }))
+
+// Create router instance for testing
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
 ```
 
 ### Mock Data
@@ -67,6 +74,11 @@ const mockService = {
 
 ## Key Test Considerations
 
+### Router Integration
+- Provides Vue Router instance to component
+- Tests navigation with correct parameters
+- Verifies route path structure
+
 ### Text Content Testing
 - Uses regex for split text content
 - Handles both complete and partial text matches
@@ -89,12 +101,44 @@ const mockService = {
 
 ## Example Tests
 
+### Testing Navigation
+```typescript
+it('handles booking service option click', async () => {
+  const { getAllByRole } = render(ServicePublicCard, {
+    props: {
+      service: mockService
+    },
+    global: {
+      plugins: [router]
+    }
+  })
+
+  const bookButtons = getAllByRole('button')
+  await fireEvent.click(bookButtons[0])
+
+  expect(logger.debug).toHaveBeenCalledWith(
+    'Book service clicked',
+    expect.objectContaining({
+      module: 'ServicePublicCard',
+      metadata: expect.objectContaining({
+        serviceId: 'service1',
+        optionId: 'opt1',
+        serviceName: 'Meditation Session'
+      })
+    })
+  )
+})
+```
+
 ### Testing Split Text Content
 ```typescript
 it('renders all service options', () => {
   render(ServicePublicCard, {
     props: {
       service: mockService
+    },
+    global: {
+      plugins: [router]
     }
   })
 
@@ -114,6 +158,9 @@ it('maintains proper layout structure', () => {
   render(ServicePublicCard, {
     props: {
       service: mockService
+    },
+    global: {
+      plugins: [router]
     }
   })
 
@@ -123,4 +170,12 @@ it('maintains proper layout structure', () => {
     ?.closest('.flex-col.sm\\:flex-row')
 
   expect(optionsContainer).toHaveClass('flex-col', 'sm:flex-row')
-}) 
+})
+```
+
+## Recent Changes
+- Added Vue Router integration for proper navigation testing
+- Updated test setup to include router in component rendering
+- Added navigation testing for booking flow
+- Fixed route parameter handling (using path parameters instead of query parameters)
+- Added working_days property to Service interface for complete type coverage
