@@ -4,18 +4,8 @@ This repository contains documentation for the JustBreatheApp project. JustBreat
 
 ## Documentation Structure
 
-- `notes-py-policies.md`: Python coding policies and guidelines
-- `notes-vue-policies.md`: Vue.js coding policies and guidelines
-- `project-backend-tests.md`: Backend testing documentation
-- `project-store.md`: Store architecture and state management documentation
-- `archive/`: Archived documentation
-
-## Getting Started
-
-1. Clone the repository
-2. Navigate to the docs folder
-3. Follow the setup instructions in relevant documents
-
-## Contributing
-
-Please follow the established documentation standards when contributing new documents or making updates to existing ones.
+- `archive`: markdown files that are no actively needed but were used in the past
+- `conversations`: markdown archives of stored conversations with claude on this project
+- `documentation`: official documentation for this project
+- `notes-{topic}.md`: miscellaneous notes on a topic
+- `project-{topic}.md`: active project and referencing document
