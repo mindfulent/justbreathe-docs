@@ -4,11 +4,11 @@ This directory contains detailed testing documentation for each Vue component in
 
 ## Directory Structure
 
-- `components/` - Component-specific test documentation
-  - `auth/` - Authentication-related components
-  - `navigation/` - Navigation-related components
+- `fe-tests/` - Frontend testing documentation
+  - `cards/` - Authentication-related components
+  - `components/` - Navigation-related components
   - `pages/` - Page components  
-  - `shared/` - Shared/common components
+- `README.md` - This file
 
 ## Testing Framework and Setup
 

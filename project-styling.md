@@ -322,6 +322,7 @@ This approach provides:
 11. [x] AddNewFormCard.vue
 12. [x] ServiceTemplateCard.vue
 13. [x] BadgeAwardModal.vue
+14. [x] ServicePublicCard.vue
 
 ##### Interactive Components
 14. [ ] GoogleAuthButton.vue
@@ -365,7 +366,7 @@ This approach provides:
 52. [ ] NotificationTestPage.vue
 53. [ ] ReleasesPage.vue
 54. [x] BrowsePage.vue
-55. [ ] PublicProfilePage.vue
+55. [x] PublicProfilePage.vue
 56. [x] NotFoundPage.vue
 57. [ ] DevAuthPage.vue (if needed for production)
 58. [ ] SnowTest.vue (if needed for production)
